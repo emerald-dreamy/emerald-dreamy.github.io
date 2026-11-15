@@ -130,6 +130,23 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;padding:.
 @media (min-width:860px){.contact .box{grid-template-columns:1.2fr 1fr}}
 footer{background:#0f1315;color:#aeb8bd;padding:2rem 0 calc(2rem + env(safe-area-inset-bottom,0px));font-size:.9rem}
 footer .wrap{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between}
+
+/* contact modal */
+.modal{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(10,14,16,.68)}
+.modal.open{display:flex}
+.mbox{position:relative;background:var(--card);color:var(--fg);width:min(540px,100%);max-height:calc(100vh - 2rem);overflow:auto;border-radius:22px;padding:clamp(1.4rem,4vw,2.2rem);border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.mbox h3{font-size:clamp(1.5rem,3vw,2rem);font-weight:800;text-transform:uppercase;margin:0 2.6rem .5rem 0}
+.mbox .sub{color:var(--muted);font-size:.95rem;margin-bottom:.6rem}
+.mbox label{display:block;font-size:.8rem;font-weight:700;letter-spacing:.04em;margin:.9rem 0 .3rem}
+.mbox input,.mbox textarea{width:100%;font:inherit;font-size:1rem;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:.75rem .9rem}
+.mbox textarea{min-height:120px;resize:vertical}
+.mbox .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.mclose{position:absolute;top:.9rem;right:.9rem;width:42px;height:42px;border-radius:50%;border:0;background:#16181b;color:#fff;font-size:1.4rem;line-height:1;cursor:pointer}
+.mbox .btn{margin-top:1.3rem;width:100%;justify-content:space-between}
+.mbox .btn[disabled]{opacity:.6;cursor:wait}
+.mmsg{margin-top:1rem;font-size:.95rem;min-height:1.4em}
+.mmsg.ok{color:var(--emerald);font-weight:700}.mmsg.err{color:#c0392b}
+.malt{margin-top:1rem;font-size:.88rem;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
@@ -143,11 +160,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between}
 <header class="top"><div class="wrap"><div class="bar">
   <a class="brand" href="#top" aria-label="Emerald Dreamy Projects Globe Ltd, home"><svg class="mark" aria-hidden="true"><use href="#logo"/></svg><span><b>EMERALD DREAMY PROJECTS GLOBE LTD</b><small>RC: 7014461</small></span></a>
   <nav class="pills" aria-label="Primary"><a href="#about">About Us</a><a href="#services">Core Services</a><a href="#philosophy">Our Philosophy</a><a href="#impact">Impact &amp; Solutions</a></nav>
-  <a class="btn hd-btn lt" href="mailto:build@emeralddreamyprojects.com?subject=Consultation%20request" style="background:#16181b;color:#fff">Request Consultation<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></a>
+  <a class="btn hd-btn lt" href="mailto:build@emeralddreamyprojects.com?subject=Consultation%20request" data-cta="consultation" style="background:#16181b;color:#fff">Request Consultation<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></a>
   <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
 </div></div></header>
 <div class="scrim" id="scrim"></div>
-<div class="drawer" id="drawer" role="dialog" aria-label="Menu"><a href="#about">About Us</a><a href="#services">Core Services</a><a href="#philosophy">Our Philosophy</a><a href="#impact">Impact &amp; Solutions</a><a class="btn lt" href="mailto:build@emeralddreamyprojects.com?subject=Partnership%20enquiry">Partner With Us<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></a></div>
+<div class="drawer" id="drawer" role="dialog" aria-label="Menu"><a href="#about">About Us</a><a href="#services">Core Services</a><a href="#philosophy">Our Philosophy</a><a href="#impact">Impact &amp; Solutions</a><a class="btn lt" href="mailto:build@emeralddreamyprojects.com?subject=Partnership%20enquiry" data-cta="partner">Partner With Us<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></a></div>
 
 <main id="main">
 <section class="hero" id="top" style="padding-top:.5rem"><div class="wrap"><div class="frame">
@@ -173,7 +190,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between}
     <div class="lab" style="color:#3b4246"><b>/ 01</b>Construction and infrastructure, RC: 7014461</div>
     <h1 id="h1">Building dreams.<span>Creating lasting value.</span></h1>
     <p class="lead">Transforming communities across Africa through innovative engineering solutions, sustainable infrastructure, and modern construction.</p>
-    <div class="row"><a class="btn" href="mailto:build@emeralddreamyprojects.com?subject=Consultation%20request">Request Consultation<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></a><a class="plain" href="#services">Explore our services</a></div>
+    <div class="row"><a class="btn" href="mailto:build@emeralddreamyprojects.com?subject=Consultation%20request" data-cta="consultation">Request Consultation<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></a><a class="plain" href="#services">Explore our services</a></div>
   </div>
   <div class="tl"><p style="max-width:26ch;font-weight:500">Closer to community, closer to lasting value.</p>
     <div class="glass"><div><b>5</b><span>Core disciplines under one team</span></div><div><b>6</b><span>Pillars guiding every project</span></div></div></div>
@@ -213,15 +230,32 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between}
     <div class="col reveal"><h3><i>B</i>The environment</h3><p>Poor planning, weak drainage, and unsustainable practices strain communities. We balance development with environmental stewardship.</p></div>
     <div class="col reveal"><h3><i>C</i>The pandemic</h3><p>COVID-19 proved why resilient infrastructure, quality housing, and functional public facilities matter. We build stronger, safer communities.</p></div>
   </div>
-  <div class="cut reveal"><div><h3>Let’s build what’s next</h3><p>Through innovative construction, housing solutions, and facility rehabilitation, we create lasting value for present and future generations.</p></div><a class="btn lt" href="mailto:build@emeralddreamyprojects.com?subject=Partnership%20enquiry">Partner With Us<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></a></div>
+  <div class="cut reveal"><div><h3>Let’s build what’s next</h3><p>Through innovative construction, housing solutions, and facility rehabilitation, we create lasting value for present and future generations.</p></div><a class="btn lt" href="mailto:build@emeralddreamyprojects.com?subject=Partnership%20enquiry" data-cta="partner">Partner With Us<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></a></div>
 </div></section>
 
 <section id="contact" class="contact" aria-labelledby="ct-h"><div class="wrap">
   <div class="lab reveal"><b>/ 06</b>Contact</div>
   <div class="box"><h2 id="ct-h" class="reveal">Planning a project? Let’s talk.</h2>
-  <div class="reveal" style="display:grid;gap:1.1rem;justify-items:start"><a class="big" href="mailto:build@emeralddreamyprojects.com?subject=Consultation%20request">build@emeralddreamyprojects.com</a><a href="tel:+2348133301022" style="font:800 1.4rem var(--display);text-decoration:none">+234 813 330 1022</a><a class="btn" href="mailto:build@emeralddreamyprojects.com?subject=Partnership%20enquiry">Request Consultation<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></a></div></div>
+  <div class="reveal" style="display:grid;gap:1.1rem;justify-items:start"><a class="big" href="mailto:build@emeralddreamyprojects.com?subject=Consultation%20request">build@emeralddreamyprojects.com</a><a href="tel:+2348133301022" style="font:800 1.4rem var(--display);text-decoration:none">+234 813 330 1022</a><a class="btn" href="mailto:build@emeralddreamyprojects.com?subject=Partnership%20enquiry" data-cta="consultation">Request Consultation<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></a></div></div>
 </div></section>
 </main>
+<div class="modal" id="cmodal" role="dialog" aria-modal="true" aria-labelledby="cm-h" aria-hidden="true">
+  <div class="mbox">
+    <button class="mclose" id="cclose" type="button" aria-label="Close">&times;</button>
+    <h3 id="cm-h">Send us a message</h3>
+    <p class="sub">Tell us about your project and we will reply by email.</p>
+    <form id="cform" novalidate>
+      <input class="hp" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label for="cf-name">Your name</label><input id="cf-name" name="name" type="text" autocomplete="name" required>
+      <label for="cf-email">Your email</label><input id="cf-email" name="email" type="email" autocomplete="email" required>
+      <label for="cf-phone">Phone (optional)</label><input id="cf-phone" name="phone" type="tel" autocomplete="tel">
+      <label for="cf-msg">Message</label><textarea id="cf-msg" name="message" required></textarea>
+      <button class="btn" type="submit" id="csend">Send message<i><svg viewBox="0 0 16 16"><use href="#arr"/></svg></i></button>
+      <div class="mmsg" id="cmsg" role="status" aria-live="polite"></div>
+    </form>
+    <p class="malt">Prefer your own email app? Write to <a href="mailto:build@emeralddreamyprojects.com">build@emeralddreamyprojects.com</a></p>
+  </div>
+</div>
 <footer><div class="wrap"><span>© 2026 Emerald Dreamy Projects Globe Ltd. RC: 7014461</span><span>Building Dreams. Creating Lasting Value.</span></div></footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -257,6 +291,40 @@ gsap.to('#ghost',{yPercent:25,ease:'none',scrollTrigger:{trigger:'.frame',start:
 gsap.to('#obj',{yPercent:-12,ease:'none',scrollTrigger:{trigger:'.frame',start:'top top',end:'bottom top',scrub:true}});
 gsap.utils.toArray('.reveal').forEach(function(el){gsap.from(el,{y:36,opacity:0,duration:.8,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%',once:true}})});
 }})();
+</script>
+<script>
+(function(){
+var m=document.getElementById('cmodal'),f=document.getElementById('cform'),msg=document.getElementById('cmsg'),btn=document.getElementById('csend'),h=document.getElementById('cm-h'),last=null,subject='Consultation request';
+function open(kind){
+  subject=kind==='partner'?'Partnership enquiry':'Consultation request';
+  h.textContent=kind==='partner'?'Partner with us':'Request a consultation';
+  msg.textContent='';msg.className='mmsg';last=document.activeElement;
+  m.classList.add('open');m.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';
+  setTimeout(function(){document.getElementById('cf-name').focus()},30);
+}
+function close(){m.classList.remove('open');m.setAttribute('aria-hidden','true');document.body.style.overflow='';if(last&&last.focus)last.focus()}
+document.querySelectorAll('a[data-cta]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();open(a.getAttribute('data-cta'))})});
+document.getElementById('cclose').addEventListener('click',close);
+m.addEventListener('click',function(e){if(e.target===m)close()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&m.classList.contains('open'))close()});
+f.addEventListener('submit',function(e){
+  e.preventDefault();
+  var d=new FormData(f);
+  if(d.get('_honey'))return;
+  var name=(d.get('name')||'').trim(),email=(d.get('email')||'').trim(),text=(d.get('message')||'').trim();
+  if(!name||!/^\S+@\S+\.\S+$/.test(email)||!text){msg.className='mmsg err';msg.textContent='Please enter your name, a valid email and a message.';return}
+  btn.disabled=true;msg.className='mmsg';msg.textContent='Sending...';
+  fetch('https://formsubmit.co/ajax/build@emeralddreamyprojects.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({name:name,email:email,phone:(d.get('phone')||'').trim(),message:text,_subject:subject+' from website',_template:'table',_captcha:'false'})})
+  .then(function(r){return r.json()})
+  .then(function(j){
+    if(j&&(j.success===true||j.success==='true')){msg.className='mmsg ok';msg.textContent='Thank you. Your message has been sent. We will reply by email soon.';f.reset()}
+    else{throw new Error('fail')}
+  })
+  .catch(function(){msg.className='mmsg err';msg.textContent='Sorry, that did not go through. Please email build@emeralddreamyprojects.com directly.'})
+  .then(function(){btn.disabled=false});
+});
+})();
 </script>
 </body>
 </html>
